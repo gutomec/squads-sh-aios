@@ -1,0 +1,85 @@
+name: crypto-token-forge
+version: 1.0.0
+description: >
+  Squad especialista em criação, lançamento e gestão de tokens crypto
+  na blockchain Solana. Cobre todo o pipeline: tokenomics design,
+  desenvolvimento SPL/Token-2022, metadados Metaplex, pools de liquidez
+  no Raydium, segurança (revoke authorities, LP lock), listagem no
+  Jupiter/DexScreener, e estratégia de comunidade. Do zero ao token
+  negociável na Phantom Wallet.
+author: gutomec
+license: MIT
+slashPrefix: ctf
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+components:
+  agents:
+    - crypto-orchestrator.md
+    - token-architect.md
+    - tokenomics-strategist.md
+    - solana-dev.md
+    - metadata-artist.md
+    - defi-launcher.md
+    - security-auditor.md
+    - community-growth.md
+  tasks:
+    - full-token-launch.md
+    - design-tokenomics.md
+    - create-spl-token.md
+    - setup-metadata.md
+    - create-liquidity-pool.md
+    - security-audit.md
+    - launch-memecoin.md
+    - community-strategy.md
+  workflows:
+    - full-token-launch-workflow.yaml
+    - memecoin-express-workflow.yaml
+    - utility-token-launch-workflow.yaml
+  checklists:
+    - token-security-checklist.md
+    - launch-readiness-checklist.md
+  templates:
+    - tokenomics-template.md
+    - token-spec-template.md
+  tools: []
+  scripts: []
+
+config:
+  extends: extend
+  coding-standards: config/coding-standards.md
+  tech-stack: config/tech-stack.md
+  source-tree: config/source-tree.md
+
+dependencies:
+  node:
+    - "@metaplex-foundation/umi"
+    - "@metaplex-foundation/umi-bundle-defaults"
+    - "@metaplex-foundation/mpl-token-metadata"
+    - "@solana/web3.js"
+    - "@solana/spl-token"
+  python: []
+  squads: []
+
+mcpTools:
+  required: []
+  optional:
+    - nano-banana-pro: "Geração de logo/imagem do token"
+    - dalle3: "Geração alternativa de imagem do token"
+
+tags:
+  - crypto
+  - solana
+  - token
+  - spl
+  - token-2022
+  - defi
+  - raydium
+  - jupiter
+  - phantom
+  - memecoin
+  - tokenomics
+  - metaplex
+  - blockchain

@@ -1,0 +1,55 @@
+name: data-quality-guardian
+version: 1.0.0
+description: "Squad especialista em qualidade de dados — profiling de datasets, detecção de anomalias, validação de schemas, geração de relatórios de qualidade e sugestão de remediações automatizadas para pipelines de dados"
+author: gutomec
+license: MIT
+slashPrefix: dqg
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+components:
+  agents:
+    - data-profiler.md
+    - anomaly-detector.md
+    - schema-validator.md
+    - data-quality-reporter.md
+    - remediation-suggester.md
+  tasks:
+    - profile-dataset.md
+    - detect-anomalies.md
+    - validate-schema.md
+    - generate-quality-report.md
+    - suggest-remediation.md
+    - full-data-quality-audit.md
+  workflows:
+    - full-data-quality-audit-workflow.yaml
+    - quick-data-check-workflow.yaml
+  checklists: []
+  templates: []
+  tools: []
+  scripts: []
+
+config:
+  extends: extend
+  coding-standards: config/coding-standards.md
+  tech-stack: config/tech-stack.md
+  source-tree: config/source-tree.md
+
+dependencies:
+  node: []
+  python: []
+  squads: []
+
+mcpTools:
+  required: []
+  optional: []
+
+tags:
+  - data-engineering
+  - data-quality
+  - data-governance
+  - anomaly-detection
+  - schema-validation
+  - etl

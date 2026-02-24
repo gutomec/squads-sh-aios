@@ -1,0 +1,74 @@
+workflow_name: full_onboarding_activation
+description: "Pipeline completo de ativação de onboarding SaaS — do rastreamento comportamental ao outreach proativo, integrando checklists personalizados, identificação de aha moment, tooltips contextuais e comunicação baseada em comportamento"
+
+agent_sequence:
+  - user-behavior-tracker
+  - checklist-builder
+  - aha-moment-identifier
+  - tooltip-generator
+  - proactive-outreach
+
+key_commands:
+  - "*activate-users"
+  - "*full-onboarding"
+
+trigger_threshold: 1
+typical_duration: "90-150 minutes"
+
+success_indicators:
+  - "Comportamento de usuários rastreado e analisado"
+  - "Checklist de onboarding personalizado criado"
+  - "Aha moment identificado com correlação de retenção"
+  - "Tooltips e guided tours gerados"
+  - "Sequência de outreach proativo configurada"
+
+transitions:
+  behavior_tracked:
+    trigger: "Comportamento rastreado — sinais de abandono e engajamento identificados"
+    confidence: 0.90
+    greeting_message: "📊 Comportamento analisado. Criando checklist personalizado."
+    next_steps:
+      - command: "*build-checklist"
+        args_template: "--segment={user_segment} --behaviorReport=behavior-report.md"
+        description: "Criar checklist de onboarding personalizado baseado em dados comportamentais"
+        priority: 1
+
+  checklist_built:
+    trigger: "Checklist de onboarding criado — milestones e progressão definidos"
+    confidence: 0.90
+    greeting_message: "✅ Checklist pronto. Identificando aha moment."
+    next_steps:
+      - command: "*find-aha"
+        args_template: "--product={product} --retentionData=behavior-report.md"
+        description: "Identificar aha moment do produto com dados de retenção"
+        priority: 1
+
+  aha_identified:
+    trigger: "Aha moment identificado — caminho otimizado definido"
+    confidence: 0.90
+    greeting_message: "💡 Aha moment encontrado! Gerando tooltips contextuais."
+    next_steps:
+      - command: "*generate-tooltips"
+        args_template: "--flow=onboarding --steps=checklist-steps"
+        description: "Gerar tooltips contextuais para o fluxo de onboarding"
+        priority: 1
+
+  tooltips_generated:
+    trigger: "Tooltips e guided tours gerados para o fluxo de onboarding"
+    confidence: 0.95
+    greeting_message: "💬 Tooltips prontos. Configurando outreach proativo."
+    next_steps:
+      - command: "*send-outreach"
+        args_template: "--userSegment={user_segment} --trigger=signup"
+        description: "Configurar sequência de outreach proativo para ativação"
+        priority: 1
+
+  outreach_configured:
+    trigger: "Sequência de outreach configurada — emails e notificações prontos"
+    confidence: 0.95
+    greeting_message: "📧 Onboarding completo! Sistema de ativação configurado."
+    next_steps:
+      - command: "*track-behavior"
+        args_template: "--userSegment={user_segment} --timeWindow=7d"
+        description: "Monitorar métricas de ativação após configuração"
+        priority: 2

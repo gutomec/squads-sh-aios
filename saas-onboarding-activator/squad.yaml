@@ -1,0 +1,56 @@
+name: saas-onboarding-activator
+version: 1.0.0
+description: "Squad especialista em ativação e onboarding de usuários SaaS — rastreamento comportamental, checklists personalizados, identificação de aha moments, tooltips contextuais e outreach proativo para reduzir churn na primeira semana"
+author: gutomec
+license: MIT
+slashPrefix: soa
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+components:
+  agents:
+    - user-behavior-tracker.md
+    - checklist-builder.md
+    - aha-moment-identifier.md
+    - tooltip-generator.md
+    - proactive-outreach.md
+  tasks:
+    - track-user-behavior.md
+    - build-onboarding-checklist.md
+    - identify-aha-moment.md
+    - generate-tooltips.md
+    - execute-proactive-outreach.md
+    - full-onboarding-activation.md
+  workflows:
+    - full-onboarding-activation-workflow.yaml
+    - quick-engagement-boost-workflow.yaml
+  checklists: []
+  templates: []
+  tools: []
+  scripts: []
+
+config:
+  extends: extend
+  coding-standards: config/coding-standards.md
+  tech-stack: config/tech-stack.md
+  source-tree: config/source-tree.md
+
+dependencies:
+  node: []
+  python: []
+  squads: []
+
+mcpTools:
+  required: []
+  optional: []
+
+tags:
+  - saas
+  - onboarding
+  - user-activation
+  - churn-prevention
+  - product-led-growth
+  - engagement
+  - retention

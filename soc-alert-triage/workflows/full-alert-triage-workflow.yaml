@@ -1,0 +1,74 @@
+workflow_name: full_alert_triage
+description: "Pipeline completo de triagem de alertas SOC — da classificação inicial ao brief para analista, integrando filtragem de falsos positivos, priorização por risk score, enriquecimento com threat intel e geração de brief acionável"
+
+agent_sequence:
+  - alert-classifier
+  - false-positive-filter
+  - threat-prioritizer
+  - context-enricher
+  - analyst-brief-generator
+
+key_commands:
+  - "*triage-full"
+  - "*full-triage"
+
+trigger_threshold: 1
+typical_duration: "30-60 minutes"
+
+success_indicators:
+  - "100% dos alertas classificados com tipo e severidade"
+  - "Falsos positivos filtrados com justificativa documentada"
+  - "Ameaças priorizadas por risk score composto"
+  - "IOCs extraídos e correlacionados com threat intel"
+  - "Brief acionável gerado para analista SOC"
+
+transitions:
+  alerts_classified:
+    trigger: "Alertas classificados — tipo, severidade e MITRE ATT&CK mapeados"
+    confidence: 0.90
+    greeting_message: "🏷️ Alertas classificados. Filtrando falsos positivos."
+    next_steps:
+      - command: "*filter-fps"
+        args_template: "--classifiedAlerts=classification-report.md"
+        description: "Filtrar falsos positivos usando baselines e padrões conhecidos"
+        priority: 1
+
+  fps_filtered:
+    trigger: "Falsos positivos filtrados — alertas reais separados com justificativas"
+    confidence: 0.90
+    greeting_message: "🛡️ FPs filtrados. Priorizando ameaças reais."
+    next_steps:
+      - command: "*prioritize"
+        args_template: "--filteredAlerts=filtered-alerts.json"
+        description: "Priorizar ameaças reais por risk score composto"
+        priority: 1
+
+  threats_prioritized:
+    trigger: "Ameaças priorizadas — risk scores calculados e ordem de resposta definida"
+    confidence: 0.90
+    greeting_message: "⚡ Ameaças priorizadas. Enriquecendo contexto."
+    next_steps:
+      - command: "*enrich"
+        args_template: "--prioritizedAlerts=prioritized-alerts.json"
+        description: "Enriquecer alertas com IOCs, MITRE ATT&CK e threat intel"
+        priority: 1
+
+  context_enriched:
+    trigger: "Contexto enriquecido — IOCs, MITRE ATT&CK e threat intel adicionados"
+    confidence: 0.95
+    greeting_message: "🔍 Contexto enriquecido. Gerando brief para analista."
+    next_steps:
+      - command: "*generate-brief"
+        args_template: "--enrichedAlerts=enriched-alerts.json"
+        description: "Gerar brief executivo para analista SOC"
+        priority: 1
+
+  brief_generated:
+    trigger: "Brief gerado — timeline, playbook e ações de resposta documentados"
+    confidence: 0.95
+    greeting_message: "📊 Triagem completa! Brief disponível para o analista."
+    next_steps:
+      - command: "*generate-brief"
+        args_template: "--enrichedAlerts=enriched-alerts.json --format=executive"
+        description: "Opcional: gerar versão executiva do brief para gestão"
+        priority: 2

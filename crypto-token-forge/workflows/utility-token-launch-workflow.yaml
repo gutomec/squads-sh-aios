@@ -1,0 +1,86 @@
+workflow_name: utility_token_launch
+description: "Lançamento de utility token com Token-2022, transfer fees e funcionalidade real"
+
+agent_sequence:
+  - tokenomics-strategist
+  - token-architect
+  - solana-dev
+  - metadata-artist
+  - security-auditor
+  - defi-launcher
+  - community-growth
+
+key_commands:
+  - "*forge-utility"
+
+trigger_threshold: 1
+typical_duration: "3-5 hours"
+
+success_indicators:
+  - "Token-2022 criado com extensões configuradas"
+  - "Transfer fee ativa e funcional"
+  - "Metadados completos on-chain"
+  - "Autoridades revogadas"
+  - "Pool de liquidez ativo"
+  - "Estratégia de produto + comunidade definida"
+
+transitions:
+  tokenomics_complete:
+    trigger: "Tokenomics com modelo de utilidade definido"
+    confidence: 0.90
+    greeting_message: "📊 Tokenomics com utilidade definido. Arquitetando Token-2022."
+    next_steps:
+      - command: "*design-architecture"
+        args_template: "--usecase=utility --features=transfer-fee,metadata-pointer"
+        description: "Projetar Token-2022 com extensões de utilidade"
+        priority: 1
+
+  architecture_complete:
+    trigger: "Token-2022 com extensões definidas"
+    confidence: 0.90
+    greeting_message: "🏗️ Arquitetura Token-2022 pronta. Implementando."
+    next_steps:
+      - command: "*create-token"
+        args_template: "--program=token-2022 --decimals={decimals} --supply={supply}"
+        description: "Criar Token-2022 com extensões"
+        priority: 1
+
+  token_created:
+    trigger: "Token-2022 criado com extensões ativas"
+    confidence: 0.95
+    greeting_message: "⚡ Token-2022 criado! Configurando metadados nativos."
+    next_steps:
+      - command: "*setup-metadata"
+        args_template: "--token={mint_address}"
+        description: "Metadados nativos via Token-2022 metadata extension"
+        priority: 1
+
+  metadata_complete:
+    trigger: "Metadados configurados via extensão nativa"
+    confidence: 0.90
+    greeting_message: "🎨 Metadados prontos. Auditoria de segurança."
+    next_steps:
+      - command: "*security-audit"
+        args_template: "--token={mint_address}"
+        description: "Auditoria com foco em extensões Token-2022"
+        priority: 1
+
+  security_passed:
+    trigger: "Audit PASSED com extensões validadas"
+    confidence: 0.95
+    greeting_message: "🛡️ Segurança OK. Pool de liquidez."
+    next_steps:
+      - command: "*create-pool"
+        args_template: "--token={mint_address} --type=cpmm"
+        description: "Pool CPMM (compatível com Token-2022)"
+        priority: 1
+
+  pool_created:
+    trigger: "Pool CPMM ativo com Token-2022"
+    confidence: 0.95
+    greeting_message: "🚀 Pool criado. Estratégia de produto e comunidade."
+    next_steps:
+      - command: "*community-strategy"
+        args_template: "--project={name} --type=utility"
+        description: "Estratégia focada em utilidade e adoção"
+        priority: 1

@@ -1,0 +1,74 @@
+workflow_name: full_data_quality_audit
+description: "Auditoria completa de qualidade de dados — do profiling à remediação, integrando detecção de anomalias, validação de schema, relatórios com scores e sugestão de correções automatizadas"
+
+agent_sequence:
+  - data-profiler
+  - anomaly-detector
+  - schema-validator
+  - data-quality-reporter
+  - remediation-suggester
+
+key_commands:
+  - "*full-audit"
+  - "*data-quality-audit"
+
+trigger_threshold: 1
+typical_duration: "30-60 minutes"
+
+success_indicators:
+  - "Dataset 100% profilado com estatísticas por coluna"
+  - "Anomalias detectadas e classificadas por severidade"
+  - "Schema validado com breaking changes identificadas"
+  - "Relatório de qualidade com score composto por 6 dimensões"
+  - "Plano de remediação com scripts e recomendações"
+
+transitions:
+  profiling_complete:
+    trigger: "Profiling completo — estatísticas e baseline calculados"
+    confidence: 0.90
+    greeting_message: "📋 Profiling completo. Detectando anomalias."
+    next_steps:
+      - command: "*detect-anomalies"
+        args_template: "--dataset={dataset} --profilingReport=profiling-report.md"
+        description: "Detectar anomalias com base no profiling realizado"
+        priority: 1
+
+  anomalies_detected:
+    trigger: "Anomalias detectadas e classificadas por severidade"
+    confidence: 0.90
+    greeting_message: "🔍 Anomalias detectadas. Validando schema."
+    next_steps:
+      - command: "*validate-schema"
+        args_template: "--dataset={dataset}"
+        description: "Validar schema e integridade referencial do dataset"
+        priority: 1
+
+  schema_validated:
+    trigger: "Schema validado — breaking changes e integridade verificadas"
+    confidence: 0.90
+    greeting_message: "🛡️ Schema validado. Gerando relatório de qualidade."
+    next_steps:
+      - command: "*quality-report"
+        args_template: "--profilingData=profiling-report.md --anomalyData=anomaly-report.md --schemaData=schema-validation-report.md"
+        description: "Gerar relatório completo de qualidade com scores por dimensão"
+        priority: 1
+
+  report_generated:
+    trigger: "Relatório de qualidade gerado com score composto"
+    confidence: 0.95
+    greeting_message: "📊 Relatório pronto. Sugerindo remediações."
+    next_steps:
+      - command: "*suggest-fix"
+        args_template: "--qualityReport=quality-report.md"
+        description: "Sugerir remediações priorizadas com scripts automatizados"
+        priority: 1
+
+  remediation_suggested:
+    trigger: "Plano de remediação criado com scripts e recomendações"
+    confidence: 0.95
+    greeting_message: "⚡ Auditoria completa! Plano de remediação disponível."
+    next_steps:
+      - command: "*quality-score"
+        args_template: "--dataset={dataset}"
+        description: "Opcional: recalcular score após aplicar remediações"
+        priority: 2

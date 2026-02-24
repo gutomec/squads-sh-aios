@@ -1,0 +1,50 @@
+workflow_name: quick_skills_match
+description: "Match rápido de skills — parsing e matching com resumo simplificado, sem auditoria detalhada de vieses e ranking formal"
+
+agent_sequence:
+  - resume-parser
+  - skills-matcher
+  - candidate-summary-agent
+
+key_commands:
+  - "*quick-match"
+  - "*skills-check"
+
+trigger_threshold: 1
+typical_duration: "10-20 minutes"
+
+success_indicators:
+  - "CVs parseados com dados estruturados"
+  - "Fit scores calculados por candidato"
+  - "Resumos simplificados gerados"
+
+transitions:
+  parsed:
+    trigger: "CVs parseados com dados estruturados"
+    confidence: 0.90
+    greeting_message: "📋 Parseados. Calculando fit."
+    next_steps:
+      - command: "*match-skills"
+        args_template: "--parsedResumes=parsed-resumes.json --jobDescription={job_description}"
+        description: "Calcular fit score dos candidatos"
+        priority: 1
+
+  matched:
+    trigger: "Fit scores calculados"
+    confidence: 0.95
+    greeting_message: "🔍 Matched. Gerando resumos."
+    next_steps:
+      - command: "*candidate-summary"
+        args_template: "--shortlist=matched-candidates.json --format=executive"
+        description: "Gerar resumos simplificados dos candidatos"
+        priority: 1
+
+  summaries_ready:
+    trigger: "Resumos simplificados prontos"
+    confidence: 0.95
+    greeting_message: "📊 Match rápido completo! Resumos disponíveis. Use *triage-full para pipeline completo com auditoria de vieses."
+    next_steps:
+      - command: "*audit-bias"
+        args_template: "--screeningResults=matched-candidates.json"
+        description: "Opcional: auditar vieses para análise mais completa"
+        priority: 2

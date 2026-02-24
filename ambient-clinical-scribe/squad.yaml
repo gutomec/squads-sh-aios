@@ -1,0 +1,56 @@
+name: ambient-clinical-scribe
+version: 1.0.0
+description: "Squad especialista em documentação clínica ambient — transcrição de consultas, notas SOAP, codificação ICD-10/CPT e revisão de qualidade HIPAA com redução de 69.5% no tempo administrativo"
+author: gutomec
+license: MIT
+slashPrefix: acs
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+components:
+  agents:
+    - ambient-listener.md
+    - clinical-note-drafter.md
+    - medical-coder.md
+    - quality-reviewer.md
+  tasks:
+    - transcribe-consultation.md
+    - draft-clinical-note.md
+    - assign-medical-codes.md
+    - review-documentation.md
+    - full-clinical-documentation.md
+  workflows:
+    - full-documentation-workflow.yaml
+    - quick-note-workflow.yaml
+  checklists: []
+  templates: []
+  tools: []
+  scripts: []
+
+config:
+  extends: extend
+  coding-standards: config/coding-standards.md
+  tech-stack: config/tech-stack.md
+  source-tree: config/source-tree.md
+
+dependencies:
+  node: []
+  python: []
+  squads: []
+
+mcpTools:
+  required: []
+  optional: []
+
+tags:
+  - healthcare
+  - clinical-documentation
+  - ambient-scribe
+  - soap-notes
+  - icd-10
+  - cpt
+  - hipaa
+  - medical-coding
+  - ehr

@@ -1,0 +1,55 @@
+name: content-factory-squad
+version: 1.0.0
+description: "Squad especialista em produção de conteúdo em escala para marketing — planejamento editorial, criação de artigos, adaptação para redes sociais, briefs de imagem e agendamento de publicações multicanal"
+author: gutomec
+license: MIT
+slashPrefix: cfs
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+components:
+  agents:
+    - content-strategist.md
+    - long-form-writer.md
+    - social-media-adapter.md
+    - image-brief-generator.md
+    - publishing-scheduler.md
+  tasks:
+    - plan-content-calendar.md
+    - write-long-form.md
+    - adapt-for-social.md
+    - generate-image-brief.md
+    - schedule-publishing.md
+    - full-content-pipeline.md
+  workflows:
+    - full-content-pipeline-workflow.yaml
+    - quick-social-blast-workflow.yaml
+  checklists: []
+  templates: []
+  tools: []
+  scripts: []
+
+config:
+  extends: extend
+  coding-standards: config/coding-standards.md
+  tech-stack: config/tech-stack.md
+  source-tree: config/source-tree.md
+
+dependencies:
+  node: []
+  python: []
+  squads: []
+
+mcpTools:
+  required: []
+  optional: []
+
+tags:
+  - content-marketing
+  - editorial
+  - social-media
+  - content-factory
+  - copywriting
+  - scheduling

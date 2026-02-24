@@ -1,0 +1,50 @@
+workflow_name: quick_data_check
+description: "Verificação rápida de qualidade — profiling e validação de schema com relatório simplificado, sem detecção detalhada de anomalias e remediação"
+
+agent_sequence:
+  - data-profiler
+  - schema-validator
+  - data-quality-reporter
+
+key_commands:
+  - "*quick-check"
+  - "*data-check"
+
+trigger_threshold: 1
+typical_duration: "10-20 minutes"
+
+success_indicators:
+  - "Profiling básico completo"
+  - "Schema validado"
+  - "Relatório simplificado gerado"
+
+transitions:
+  profiled:
+    trigger: "Profiling básico concluído"
+    confidence: 0.90
+    greeting_message: "📋 Profilado. Validando schema."
+    next_steps:
+      - command: "*validate-schema"
+        args_template: "--dataset={dataset}"
+        description: "Validar schema do dataset profilado"
+        priority: 1
+
+  validated:
+    trigger: "Schema validado"
+    confidence: 0.95
+    greeting_message: "🛡️ Validado. Gerando relatório."
+    next_steps:
+      - command: "*quality-report"
+        args_template: "--profilingData=profiling-report.md --schemaData=schema-validation-report.md --format=standard"
+        description: "Gerar relatório simplificado de qualidade"
+        priority: 1
+
+  report_complete:
+    trigger: "Relatório de qualidade simplificado gerado"
+    confidence: 0.95
+    greeting_message: "📊 Verificação rápida concluída! Relatório disponível. Use *full-audit para auditoria completa com anomalias e remediação."
+    next_steps:
+      - command: "*full-audit"
+        args_template: "--dataset={dataset} --depth=deep"
+        description: "Opcional: executar auditoria completa com anomalias e remediação"
+        priority: 2

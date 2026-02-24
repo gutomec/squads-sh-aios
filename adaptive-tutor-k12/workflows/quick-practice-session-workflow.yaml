@@ -1,0 +1,38 @@
+workflow_name: quick_practice_session
+description: "Sessão rápida de prática — tutoria direta com rastreamento de progresso, sem diagnóstico completo nem relatório para pais"
+
+agent_sequence:
+  - tutor-agent
+  - progress-tracker
+
+key_commands:
+  - "*quick-practice"
+  - "*practice-session"
+
+trigger_threshold: 1
+typical_duration: "20-40 minutes"
+
+success_indicators:
+  - "Sessão de tutoria entregue com exercícios e feedback"
+  - "Progresso atualizado com mastery por tópico"
+
+transitions:
+  session_done:
+    trigger: "Sessão de prática concluída com exercícios e feedback"
+    confidence: 0.95
+    greeting_message: "🎓 Prática concluída. Atualizando progresso."
+    next_steps:
+      - command: "*track-progress"
+        args_template: "--student={student}"
+        description: "Rastrear progresso e atualizar mastery map"
+        priority: 1
+
+  progress_updated:
+    trigger: "Progresso atualizado — mastery recalculado"
+    confidence: 0.95
+    greeting_message: "📊 Progresso atualizado. Sessão de prática finalizada!"
+    next_steps:
+      - command: "*practice"
+        args_template: "--topic={next_topic}"
+        description: "Opcional: continuar com mais exercícios"
+        priority: 2

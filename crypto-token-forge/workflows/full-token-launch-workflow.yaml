@@ -1,0 +1,98 @@
+workflow_name: full_token_launch
+description: "Pipeline completo de criação de token crypto na Solana — do conceito ao token negociável na Phantom Wallet"
+
+agent_sequence:
+  - tokenomics-strategist
+  - token-architect
+  - solana-dev
+  - metadata-artist
+  - security-auditor
+  - solana-dev
+  - defi-launcher
+  - community-growth
+
+key_commands:
+  - "*forge-token"
+  - "*forge-utility"
+
+trigger_threshold: 1
+typical_duration: "2-4 hours"
+
+success_indicators:
+  - "Token criado com mint address confirmado"
+  - "Metadados on-chain — nome e logo visíveis na Phantom"
+  - "Autoridades revogadas (mint, freeze)"
+  - "Pool de liquidez ativo no Raydium"
+  - "Token swappable via Jupiter"
+  - "Audit report com score PASSED"
+  - "Estratégia de growth definida"
+
+transitions:
+  tokenomics_complete:
+    trigger: "Tokenomics aprovado pelo usuário — tokenomics.yaml gerado"
+    confidence: 0.90
+    greeting_message: "📊 Tokenomics definido. Iniciando design de arquitetura."
+    next_steps:
+      - command: "*design-architecture"
+        args_template: "{token_type}"
+        description: "Definir programa (SPL/Token-2022), extensões e decimais"
+        priority: 1
+
+  architecture_complete:
+    trigger: "Arquitetura definida — token-spec.yaml gerado"
+    confidence: 0.90
+    greeting_message: "🏗️ Arquitetura definida. Criando token na devnet."
+    next_steps:
+      - command: "*create-token"
+        args_template: "--program={program} --decimals={decimals} --supply={supply}"
+        description: "Criar token e mintar supply na devnet"
+        priority: 1
+
+  token_created:
+    trigger: "Token criado e supply mintado — mint address confirmado"
+    confidence: 0.95
+    greeting_message: "⚡ Token criado! Configurando metadados."
+    next_steps:
+      - command: "*setup-metadata"
+        args_template: "--token={mint_address} --name={name} --symbol={symbol}"
+        description: "Configurar metadados via Metaplex"
+        priority: 1
+
+  metadata_complete:
+    trigger: "Metadados on-chain — token visível com nome e logo"
+    confidence: 0.90
+    greeting_message: "🎨 Metadados configurados. Iniciando auditoria de segurança."
+    next_steps:
+      - command: "*security-audit"
+        args_template: "--token={mint_address}"
+        description: "Auditoria completa e revogação de autoridades"
+        priority: 1
+
+  security_passed:
+    trigger: "Audit score PASSED — autoridades revogadas"
+    confidence: 0.95
+    greeting_message: "🛡️ Segurança validada. Criando pool de liquidez."
+    next_steps:
+      - command: "*create-pool"
+        args_template: "--token={mint_address} --pair=SOL --type=cpmm"
+        description: "Criar pool de liquidez no Raydium"
+        priority: 1
+
+  pool_created:
+    trigger: "Pool ativo — token swappable"
+    confidence: 0.95
+    greeting_message: "🚀 Pool criado! Token negociável. Definindo estratégia de growth."
+    next_steps:
+      - command: "*community-strategy"
+        args_template: "--project={project_name}"
+        description: "Definir estratégia de comunidade e marketing"
+        priority: 1
+
+  launch_complete:
+    trigger: "Estratégia de growth definida — growth-plan.md gerado"
+    confidence: 0.95
+    greeting_message: "🎯 Token lançado com sucesso! Pipeline completo."
+    next_steps:
+      - command: "*forge-status"
+        description: "Gerar resumo final do lançamento"
+        priority: 1

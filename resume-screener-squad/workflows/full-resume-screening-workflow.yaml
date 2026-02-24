@@ -1,0 +1,74 @@
+workflow_name: full_resume_screening
+description: "Pipeline completo de triagem de currículos — do parsing automatizado ao resumo executivo, integrando matching de skills, auditoria de vieses, ranking transparente e briefs para hiring managers"
+
+agent_sequence:
+  - resume-parser
+  - skills-matcher
+  - bias-auditor
+  - shortlist-ranker
+  - candidate-summary-agent
+
+key_commands:
+  - "*triage-full"
+  - "*screen-resumes"
+
+trigger_threshold: 1
+typical_duration: "30-60 minutes"
+
+success_indicators:
+  - "Currículos parseados com dados estruturados"
+  - "Fit score calculado por candidato"
+  - "Auditoria de vieses realizada sem disparidades críticas"
+  - "Shortlist ranqueada com justificativas transparentes"
+  - "Resumos executivos e matriz comparativa gerados"
+
+transitions:
+  resumes_parsed:
+    trigger: "Currículos parseados — dados estruturados extraídos"
+    confidence: 0.90
+    greeting_message: "📋 CVs parseados. Calculando fit scores."
+    next_steps:
+      - command: "*match-skills"
+        args_template: "--parsedResumes=parsed-resumes.json --jobDescription={job_description}"
+        description: "Comparar skills dos candidatos com requisitos da vaga"
+        priority: 1
+
+  skills_matched:
+    trigger: "Fit scores calculados — gaps e transferíveis identificados"
+    confidence: 0.90
+    greeting_message: "🔍 Skills matched. Auditando vieses."
+    next_steps:
+      - command: "*audit-bias"
+        args_template: "--screeningResults=matched-candidates.json"
+        description: "Auditar processo de matching por vieses inconscientes"
+        priority: 1
+
+  bias_audited:
+    trigger: "Auditoria de viés completa — flags e recomendações gerados"
+    confidence: 0.90
+    greeting_message: "🛡️ Vieses auditados. Ranqueando candidatos."
+    next_steps:
+      - command: "*rank-candidates"
+        args_template: "--matchedCandidates=matched-candidates.json --biasFlags=bias-flags.json"
+        description: "Ranquear candidatos com base em fit score ajustado por bias"
+        priority: 1
+
+  candidates_ranked:
+    trigger: "Shortlist ranqueada com justificativas"
+    confidence: 0.95
+    greeting_message: "⚡ Candidatos ranqueados. Gerando resumos."
+    next_steps:
+      - command: "*candidate-summary"
+        args_template: "--shortlist=ranked-shortlist.json"
+        description: "Gerar resumos executivos e matriz comparativa"
+        priority: 1
+
+  summaries_generated:
+    trigger: "Resumos executivos e matriz comparativa prontos"
+    confidence: 0.95
+    greeting_message: "📊 Triagem completa! Briefing disponível para o hiring manager."
+    next_steps:
+      - command: "*check-fairness"
+        args_template: "--rankedCandidates=ranked-shortlist.json"
+        description: "Opcional: verificar fairness final do resultado"
+        priority: 2

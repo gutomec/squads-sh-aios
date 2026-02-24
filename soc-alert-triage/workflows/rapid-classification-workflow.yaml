@@ -1,0 +1,50 @@
+workflow_name: rapid_classification
+description: "Classificação rápida de alertas — da categorização ao brief simplificado, pulando priorização detalhada e enriquecimento profundo"
+
+agent_sequence:
+  - alert-classifier
+  - false-positive-filter
+  - analyst-brief-generator
+
+key_commands:
+  - "*rapid-classify"
+  - "*quick-triage"
+
+trigger_threshold: 1
+typical_duration: "10-20 minutes"
+
+success_indicators:
+  - "Alertas classificados rapidamente"
+  - "Falsos positivos filtrados"
+  - "Brief simplificado gerado"
+
+transitions:
+  classified:
+    trigger: "Alertas classificados e categorizados"
+    confidence: 0.90
+    greeting_message: "🏷️ Classificados. Filtrando FPs."
+    next_steps:
+      - command: "*filter-fps"
+        args_template: "--classifiedAlerts=classification-report.md"
+        description: "Filtrar falsos positivos para separar alertas reais"
+        priority: 1
+
+  filtered:
+    trigger: "FPs filtrados — alertas reais separados"
+    confidence: 0.95
+    greeting_message: "🛡️ Filtrados. Gerando brief rápido."
+    next_steps:
+      - command: "*generate-brief"
+        args_template: "--enrichedAlerts=filtered-alerts.json --format=standard"
+        description: "Gerar brief simplificado para analista SOC"
+        priority: 1
+
+  brief_generated:
+    trigger: "Brief simplificado gerado — classificação e filtragem documentadas"
+    confidence: 0.95
+    greeting_message: "📊 Classificação rápida completa! Brief disponível. Use *triage-full para pipeline completo com priorização e enriquecimento."
+    next_steps:
+      - command: "*triage-full"
+        args_template: "--alerts={original_alerts}"
+        description: "Opcional: executar pipeline completo para análise detalhada"
+        priority: 2

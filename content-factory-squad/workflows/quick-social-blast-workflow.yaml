@@ -1,0 +1,50 @@
+workflow_name: quick_social_blast
+description: "Produção rápida de conteúdo social — do tema ao post agendado, pulando conteúdo longo e briefs de imagem"
+
+agent_sequence:
+  - content-strategist
+  - social-media-adapter
+  - publishing-scheduler
+
+key_commands:
+  - "*social-blast"
+  - "*quick-social"
+
+trigger_threshold: 1
+typical_duration: "15-30 minutes"
+
+success_indicators:
+  - "Tema definido e aprovado"
+  - "Posts sociais criados para plataformas alvo"
+  - "Publicações agendadas"
+
+transitions:
+  theme_defined:
+    trigger: "Tema e briefing social definidos pelo estrategista"
+    confidence: 0.90
+    greeting_message: "📋 Tema definido. Criando posts sociais."
+    next_steps:
+      - command: "*adapt-social"
+        args_template: "--content={theme_brief} --platforms={platforms}"
+        description: "Criar posts sociais diretamente a partir do briefing"
+        priority: 1
+
+  social_ready:
+    trigger: "Posts sociais prontos para todas as plataformas"
+    confidence: 0.95
+    greeting_message: "📱 Posts prontos. Agendando publicações."
+    next_steps:
+      - command: "*schedule"
+        args_template: "--content=social-posts.json --channels={platforms}"
+        description: "Agendar publicações em horários ótimos"
+        priority: 1
+
+  blast_complete:
+    trigger: "Publicações agendadas — social blast completo"
+    confidence: 0.95
+    greeting_message: "⏰ Social blast completo! Publicações agendadas."
+    next_steps:
+      - command: "*optimize-times"
+        args_template: "--channel={primary_platform}"
+        description: "Opcional: otimizar horários baseado em dados históricos"
+        priority: 2

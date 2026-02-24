@@ -1,0 +1,74 @@
+workflow_name: full_clinical_documentation
+description: "Pipeline completo de documentação clínica — do áudio da consulta ao prontuário completo com nota SOAP, códigos ICD-10/CPT e revisão de qualidade"
+
+agent_sequence:
+  - ambient-listener
+  - clinical-note-drafter
+  - medical-coder
+  - quality-reviewer
+
+key_commands:
+  - "*document-visit"
+  - "*full-documentation"
+
+trigger_threshold: 1
+typical_duration: "5-15 minutes"
+
+success_indicators:
+  - "Transcrição gerada com speakers identificados"
+  - "Nota clínica SOAP completa e estruturada"
+  - "Códigos ICD-10-CM atribuídos com confidence >= 80%"
+  - "Códigos CPT atribuídos e nível E/M definido"
+  - "Quality review score >= 90%"
+  - "Compliance HIPAA verificado sem violações"
+  - "Pacote de documentação completo gerado"
+
+transitions:
+  transcription_complete:
+    trigger: "Transcrição finalizada — speakers identificados e termos médicos mapeados"
+    confidence: 0.90
+    greeting_message: "🎙️ Transcrição completa. Iniciando geração da nota clínica."
+    next_steps:
+      - command: "*draft-note"
+        args_template: "--format=soap"
+        description: "Gerar nota clínica em formato SOAP a partir da transcrição"
+        priority: 1
+
+  note_drafted:
+    trigger: "Nota clínica SOAP gerada com todas as seções preenchidas"
+    confidence: 0.90
+    greeting_message: "📋 Nota SOAP gerada. Iniciando codificação médica."
+    next_steps:
+      - command: "*assign-codes"
+        args_template: "--note={clinical_note_path}"
+        description: "Atribuir códigos ICD-10 e CPT baseados na nota clínica"
+        priority: 1
+
+  codes_assigned:
+    trigger: "Códigos ICD-10 e CPT atribuídos com confidence scores"
+    confidence: 0.90
+    greeting_message: "🏥 Codificação completa. Iniciando revisão de qualidade."
+    next_steps:
+      - command: "*review-note"
+        args_template: "--note={clinical_note_path} --codes={coding_report_path}"
+        description: "Revisar qualidade, completude e compliance da documentação"
+        priority: 1
+
+  review_passed:
+    trigger: "Quality review score >= 90% — documentação aprovada"
+    confidence: 0.95
+    greeting_message: "✅ Documentação aprovada! Pacote completo gerado."
+    next_steps:
+      - command: "*full-documentation"
+        description: "Gerar pacote de documentação final para o prontuário"
+        priority: 1
+
+  review_failed:
+    trigger: "Quality review score < 90% — correções necessárias"
+    confidence: 0.85
+    greeting_message: "⚠️ Documentação precisa de correções. Retornando ao drafter."
+    next_steps:
+      - command: "*draft-note"
+        args_template: "--format=soap --fixes={issues_list}"
+        description: "Corrigir nota clínica baseado nos issues identificados"
+        priority: 1

@@ -1,0 +1,74 @@
+workflow_name: full_code_review
+description: "Pipeline completo de code review automatizado — revisão de segurança, análise lógica, verificação arquitetural, enforcement de estilo e geração de review summary priorizado com verdict"
+
+agent_sequence:
+  - security-reviewer
+  - logic-reviewer
+  - architecture-checker
+  - style-enforcer
+  - review-summary-writer
+
+key_commands:
+  - "*full-review"
+  - "*code-review"
+
+trigger_threshold: 1
+typical_duration: "30-60 minutes"
+
+success_indicators:
+  - "Vulnerabilidades de segurança OWASP Top 10 verificadas"
+  - "Edge cases e race conditions identificados"
+  - "Aderência a padrões arquiteturais verificada"
+  - "Coding standards enforçados"
+  - "Review summary priorizado com verdict (APPROVE/REQUEST_CHANGES/BLOCK)"
+
+transitions:
+  security_reviewed:
+    trigger: "Revisão de segurança completa — vulnerabilidades classificadas"
+    confidence: 0.90
+    greeting_message: "🔒 Segurança revisada. Analisando lógica."
+    next_steps:
+      - command: "*review-logic"
+        args_template: "--code={code}"
+        description: "Analisar lógica e corretude do código"
+        priority: 1
+
+  logic_reviewed:
+    trigger: "Análise lógica completa — edge cases e corretude verificados"
+    confidence: 0.90
+    greeting_message: "🧠 Lógica analisada. Verificando arquitetura."
+    next_steps:
+      - command: "*check-architecture"
+        args_template: "--code={code}"
+        description: "Verificar aderência a padrões arquiteturais"
+        priority: 1
+
+  architecture_checked:
+    trigger: "Verificação arquitetural completa — padrões e acoplamento analisados"
+    confidence: 0.90
+    greeting_message: "🏗️ Arquitetura verificada. Enforçando estilo."
+    next_steps:
+      - command: "*check-style"
+        args_template: "--code={code}"
+        description: "Verificar aderência a coding standards"
+        priority: 1
+
+  style_enforced:
+    trigger: "Coding standards verificados — naming e formatação validados"
+    confidence: 0.95
+    greeting_message: "✅ Estilo verificado. Gerando review summary."
+    next_steps:
+      - command: "*write-summary"
+        args_template: "--findings={all_findings}"
+        description: "Gerar sumário priorizado com verdict"
+        priority: 1
+
+  review_complete:
+    trigger: "Review summary gerado com verdict e findings priorizados"
+    confidence: 0.95
+    greeting_message: "📝 Code review completo! Summary disponível."
+    next_steps:
+      - command: "*full-review"
+        args_template: "--code={next_code}"
+        description: "Opcional: iniciar novo code review"
+        priority: 2

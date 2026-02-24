@@ -1,0 +1,50 @@
+workflow_name: quick_engagement_boost
+description: "Boost rápido de engajamento — do rastreamento ao outreach proativo, focando em identificar aha moment e re-engajar usuários em risco de abandono"
+
+agent_sequence:
+  - user-behavior-tracker
+  - aha-moment-identifier
+  - proactive-outreach
+
+key_commands:
+  - "*quick-engage"
+  - "*boost-engagement"
+
+trigger_threshold: 1
+typical_duration: "30-45 minutes"
+
+success_indicators:
+  - "Sinais de abandono detectados"
+  - "Aha moment identificado"
+  - "Outreach de re-engajamento enviado"
+
+transitions:
+  signals_detected:
+    trigger: "Sinais de abandono e comportamento analisados"
+    confidence: 0.90
+    greeting_message: "📊 Sinais detectados. Identificando aha moment."
+    next_steps:
+      - command: "*find-aha"
+        args_template: "--product={product} --retentionData=behavior-report.md"
+        description: "Identificar aha moment para re-engajamento"
+        priority: 1
+
+  aha_found:
+    trigger: "Aha moment identificado — caminho de re-engajamento definido"
+    confidence: 0.95
+    greeting_message: "💡 Aha moment claro. Enviando outreach proativo."
+    next_steps:
+      - command: "*send-outreach"
+        args_template: "--userSegment={user_segment} --trigger=inactivity_72h --channel=email"
+        description: "Enviar outreach de re-engajamento focado no aha moment"
+        priority: 1
+
+  engagement_sent:
+    trigger: "Outreach de re-engajamento enviado — aguardando resposta"
+    confidence: 0.95
+    greeting_message: "📧 Boost de engajamento completo! Outreach enviado para usuários em risco."
+    next_steps:
+      - command: "*track-behavior"
+        args_template: "--userSegment={user_segment} --timeWindow=24h"
+        description: "Monitorar resposta ao outreach de re-engajamento"
+        priority: 2

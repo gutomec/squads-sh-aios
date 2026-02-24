@@ -1,0 +1,55 @@
+name: resume-screener-squad
+version: 1.0.0
+description: "Squad especialista em triagem de currículos para recrutamento — parsing automatizado de CVs, matching de skills com requisitos da vaga, auditoria de vieses, ranking de candidatos e geração de resumos executivos para hiring managers"
+author: gutomec
+license: MIT
+slashPrefix: rss
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+components:
+  agents:
+    - resume-parser.md
+    - skills-matcher.md
+    - bias-auditor.md
+    - shortlist-ranker.md
+    - candidate-summary-agent.md
+  tasks:
+    - parse-resumes.md
+    - match-skills.md
+    - audit-bias.md
+    - rank-candidates.md
+    - generate-candidate-summary.md
+    - full-resume-screening.md
+  workflows:
+    - full-resume-screening-workflow.yaml
+    - quick-skills-match-workflow.yaml
+  checklists: []
+  templates: []
+  tools: []
+  scripts: []
+
+config:
+  extends: extend
+  coding-standards: config/coding-standards.md
+  tech-stack: config/tech-stack.md
+  source-tree: config/source-tree.md
+
+dependencies:
+  node: []
+  python: []
+  squads: []
+
+mcpTools:
+  required: []
+  optional: []
+
+tags:
+  - hr
+  - recruitment
+  - resume-screening
+  - talent-acquisition
+  - bias-detection
+  - hiring

@@ -1,0 +1,50 @@
+workflow_name: quick_clinical_note
+description: "Geração rápida de nota clínica SOAP com revisão de qualidade — sem codificação médica (ICD-10/CPT posposta para depois)"
+
+agent_sequence:
+  - ambient-listener
+  - clinical-note-drafter
+  - quality-reviewer
+
+key_commands:
+  - "*quick-note"
+  - "*draft-visit"
+
+trigger_threshold: 1
+typical_duration: "3-8 minutes"
+
+success_indicators:
+  - "Transcrição gerada com speakers identificados"
+  - "Nota clínica SOAP completa e estruturada"
+  - "Quality review score >= 90%"
+  - "Nota pronta para prontuário (codificação posterior)"
+
+transitions:
+  transcription_complete:
+    trigger: "Transcrição finalizada — speakers identificados"
+    confidence: 0.90
+    greeting_message: "🎙️ Transcrição completa. Gerando nota SOAP rápida."
+    next_steps:
+      - command: "*draft-note"
+        args_template: "--format=soap"
+        description: "Gerar nota clínica em formato SOAP"
+        priority: 1
+
+  note_drafted:
+    trigger: "Nota clínica SOAP gerada"
+    confidence: 0.90
+    greeting_message: "📋 Nota SOAP gerada. Revisão rápida de qualidade."
+    next_steps:
+      - command: "*review-note"
+        args_template: "--note={clinical_note_path}"
+        description: "Revisar qualidade e completude da nota (sem codificação)"
+        priority: 1
+
+  review_passed:
+    trigger: "Quality review score >= 90% — nota aprovada"
+    confidence: 0.95
+    greeting_message: "✅ Nota aprovada! Pronta para o prontuário. Codificação pode ser feita posteriormente."
+    next_steps:
+      - command: "*assign-codes"
+        description: "Opcionalmente, atribuir códigos ICD-10/CPT agora"
+        priority: 2

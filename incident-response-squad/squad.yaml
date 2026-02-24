@@ -1,0 +1,56 @@
+name: incident-response-squad
+version: 1.0.0
+description: "Squad especialista em resposta a incidentes para DevOps/SRE — análise de logs, correlação de causa raiz, execução de runbooks, comunicação de status e geração de post-mortems blameless"
+author: gutomec
+license: MIT
+slashPrefix: irs
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+components:
+  agents:
+    - log-analyzer.md
+    - root-cause-correlator.md
+    - runbook-executor.md
+    - status-page-updater.md
+    - postmortem-writer.md
+  tasks:
+    - analyze-incident-logs.md
+    - correlate-root-cause.md
+    - execute-runbook.md
+    - update-status-page.md
+    - write-postmortem.md
+    - full-incident-response.md
+  workflows:
+    - full-incident-response-workflow.yaml
+    - rapid-triage-workflow.yaml
+  checklists: []
+  templates: []
+  tools: []
+  scripts: []
+
+config:
+  extends: extend
+  coding-standards: config/coding-standards.md
+  tech-stack: config/tech-stack.md
+  source-tree: config/source-tree.md
+
+dependencies:
+  node: []
+  python: []
+  squads: []
+
+mcpTools:
+  required: []
+  optional: []
+
+tags:
+  - incident-response
+  - devops
+  - sre
+  - monitoring
+  - on-call
+  - postmortem
+  - runbook

@@ -1,0 +1,55 @@
+name: adaptive-tutor-k12
+version: 1.0.0
+description: "Squad especialista em tutoria adaptativa K-12 — avaliação diagnóstica, mapeamento curricular personalizado, sessões de tutoria com dificuldade adaptativa, rastreamento de progresso e relatórios para pais e educadores"
+author: gutomec
+license: MIT
+slashPrefix: atk
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+components:
+  agents:
+    - diagnostic-assessor.md
+    - curriculum-mapper.md
+    - tutor-agent.md
+    - progress-tracker.md
+    - parent-report-agent.md
+  tasks:
+    - run-diagnostic-assessment.md
+    - map-curriculum-path.md
+    - deliver-tutoring-session.md
+    - track-learning-progress.md
+    - generate-parent-report.md
+    - full-tutoring-cycle.md
+  workflows:
+    - full-tutoring-cycle-workflow.yaml
+    - quick-practice-session-workflow.yaml
+  checklists: []
+  templates: []
+  tools: []
+  scripts: []
+
+config:
+  extends: extend
+  coding-standards: config/coding-standards.md
+  tech-stack: config/tech-stack.md
+  source-tree: config/source-tree.md
+
+dependencies:
+  node: []
+  python: []
+  squads: []
+
+mcpTools:
+  required: []
+  optional: []
+
+tags:
+  - education
+  - k12
+  - adaptive-learning
+  - tutoring
+  - personalized-education
+  - edtech

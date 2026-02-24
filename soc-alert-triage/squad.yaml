@@ -1,0 +1,56 @@
+name: soc-alert-triage
+version: 1.0.0
+description: "Squad especialista em triagem de alertas SOC para cybersecurity — classificação automatizada, filtragem de falsos positivos, priorização de ameaças, enriquecimento com threat intel e geração de briefs para analistas"
+author: gutomec
+license: MIT
+slashPrefix: sat
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+components:
+  agents:
+    - alert-classifier.md
+    - false-positive-filter.md
+    - threat-prioritizer.md
+    - context-enricher.md
+    - analyst-brief-generator.md
+  tasks:
+    - classify-alerts.md
+    - filter-false-positives.md
+    - prioritize-threats.md
+    - enrich-context.md
+    - generate-analyst-brief.md
+    - full-alert-triage.md
+  workflows:
+    - full-alert-triage-workflow.yaml
+    - rapid-classification-workflow.yaml
+  checklists: []
+  templates: []
+  tools: []
+  scripts: []
+
+config:
+  extends: extend
+  coding-standards: config/coding-standards.md
+  tech-stack: config/tech-stack.md
+  source-tree: config/source-tree.md
+
+dependencies:
+  node: []
+  python: []
+  squads: []
+
+mcpTools:
+  required: []
+  optional: []
+
+tags:
+  - cybersecurity
+  - soc
+  - alert-triage
+  - threat-intel
+  - siem
+  - incident-detection
+  - false-positive

@@ -1,0 +1,40 @@
+workflow_name: memecoin_express
+description: "Lançamento rápido de memecoin via Pump.fun — do conceito ao token negociável em minutos"
+
+agent_sequence:
+  - crypto-orchestrator
+  - metadata-artist
+  - community-growth
+
+key_commands:
+  - "*forge-memecoin"
+
+trigger_threshold: 1
+typical_duration: "15-30 minutes"
+
+success_indicators:
+  - "Token criado no Pump.fun"
+  - "Token negociável na bonding curve"
+  - "Link de trading funcional"
+  - "Estratégia de growth básica definida"
+
+transitions:
+  concept_ready:
+    trigger: "Nome, ticker, descrição e imagem definidos"
+    confidence: 0.95
+    greeting_message: "🎨 Conceito pronto. Criando no Pump.fun."
+    next_steps:
+      - command: "*launch-memecoin"
+        args_template: "--name={name} --ticker={ticker} --platform=pumpfun"
+        description: "Criar memecoin no Pump.fun"
+        priority: 1
+
+  token_live:
+    trigger: "Token criado e negociável na bonding curve"
+    confidence: 0.95
+    greeting_message: "🚀 Memecoin live! Planejando growth."
+    next_steps:
+      - command: "*community-strategy"
+        args_template: "--project={name} --type=memecoin"
+        description: "Estratégia de viralização"
+        priority: 1

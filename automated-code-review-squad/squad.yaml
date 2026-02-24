@@ -1,0 +1,55 @@
+name: automated-code-review-squad
+version: 1.0.0
+description: "Squad especialista em code review automatizado — revisão de segurança, análise lógica, verificação de padrões arquiteturais, enforcement de coding standards e geração de review summaries priorizados para PRs e commits"
+author: gutomec
+license: MIT
+slashPrefix: acr
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+components:
+  agents:
+    - security-reviewer.md
+    - logic-reviewer.md
+    - architecture-checker.md
+    - style-enforcer.md
+    - review-summary-writer.md
+  tasks:
+    - review-security.md
+    - review-logic.md
+    - check-architecture.md
+    - enforce-style.md
+    - write-review-summary.md
+    - full-code-review.md
+  workflows:
+    - full-code-review-workflow.yaml
+    - quick-security-check-workflow.yaml
+  checklists: []
+  templates: []
+  tools: []
+  scripts: []
+
+config:
+  extends: extend
+  coding-standards: config/coding-standards.md
+  tech-stack: config/tech-stack.md
+  source-tree: config/source-tree.md
+
+dependencies:
+  node: []
+  python: []
+  squads: []
+
+mcpTools:
+  required: []
+  optional: []
+
+tags:
+  - software-development
+  - code-review
+  - security
+  - architecture
+  - code-quality
+  - pull-request

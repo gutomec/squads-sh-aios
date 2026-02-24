@@ -1,0 +1,74 @@
+workflow_name: full_tutoring_cycle
+description: "Ciclo completo de tutoria adaptativa K-12 — da avaliação diagnóstica ao relatório para pais, integrando mapeamento curricular personalizado, sessão de tutoria adaptativa e rastreamento de progresso"
+
+agent_sequence:
+  - diagnostic-assessor
+  - curriculum-mapper
+  - tutor-agent
+  - progress-tracker
+  - parent-report-agent
+
+key_commands:
+  - "*full-tutoring"
+  - "*tutor-cycle"
+
+trigger_threshold: 1
+typical_duration: "60-90 minutes"
+
+success_indicators:
+  - "Diagnóstico completo — lacunas e estilo de aprendizagem identificados"
+  - "Trilha personalizada criada e alinhada com currículo oficial"
+  - "Sessão de tutoria entregue com dificuldade adaptativa"
+  - "Progresso rastreado com mastery por tópico"
+  - "Relatório para pais gerado com conquistas e recomendações"
+
+transitions:
+  diagnostic_complete:
+    trigger: "Avaliação diagnóstica completa — lacunas e perfil de aprendizagem identificados"
+    confidence: 0.90
+    greeting_message: "📋 Diagnóstico completo. Criando trilha personalizada."
+    next_steps:
+      - command: "*map-curriculum"
+        args_template: "--diagnosticResult=diagnostic-report.md --subject={subject}"
+        description: "Criar trilha de aprendizagem personalizada baseada no diagnóstico"
+        priority: 1
+
+  curriculum_mapped:
+    trigger: "Trilha de aprendizagem personalizada criada com milestones"
+    confidence: 0.90
+    greeting_message: "🗺️ Trilha criada. Iniciando sessão de tutoria."
+    next_steps:
+      - command: "*tutor-session"
+        args_template: "--topic={first_topic} --difficulty={recommended_difficulty} --learningStyle={learning_style}"
+        description: "Entregar sessão de tutoria personalizada com o primeiro tópico da trilha"
+        priority: 1
+
+  session_complete:
+    trigger: "Sessão de tutoria entregue — exercícios realizados e feedback dado"
+    confidence: 0.90
+    greeting_message: "🎓 Sessão concluída. Analisando progresso."
+    next_steps:
+      - command: "*track-progress"
+        args_template: "--student={student}"
+        description: "Rastrear progresso de aprendizagem e calcular mastery por tópico"
+        priority: 1
+
+  progress_tracked:
+    trigger: "Progresso rastreado — mastery e tendências calculadas"
+    confidence: 0.95
+    greeting_message: "📊 Progresso analisado. Gerando relatório para pais."
+    next_steps:
+      - command: "*parent-report"
+        args_template: "--student={student} --period=session"
+        description: "Gerar relatório de progresso para pais com conquistas e recomendações"
+        priority: 1
+
+  report_generated:
+    trigger: "Relatório para pais gerado com conquistas e recomendações"
+    confidence: 0.95
+    greeting_message: "📧 Ciclo completo! Relatório disponível para os pais."
+    next_steps:
+      - command: "*tutor-session"
+        args_template: "--topic={next_topic} --difficulty={adjusted_difficulty}"
+        description: "Opcional: continuar com o próximo tópico da trilha"
+        priority: 2

@@ -1,0 +1,38 @@
+workflow_name: quick_security_check
+description: "Verificação rápida de segurança — revisão focada em vulnerabilidades de segurança com summary simplificado"
+
+agent_sequence:
+  - security-reviewer
+  - review-summary-writer
+
+key_commands:
+  - "*quick-security"
+  - "*sec-check"
+
+trigger_threshold: 1
+typical_duration: "10-20 minutes"
+
+success_indicators:
+  - "Vulnerabilidades de segurança verificadas"
+  - "Summary focado em segurança gerado"
+
+transitions:
+  security_done:
+    trigger: "Revisão de segurança concluída"
+    confidence: 0.95
+    greeting_message: "🔒 Segurança revisada. Gerando summary."
+    next_steps:
+      - command: "*write-summary"
+        args_template: "--findings={securityFindings} --format=standard"
+        description: "Gerar sumário focado em findings de segurança"
+        priority: 1
+
+  quick_check_complete:
+    trigger: "Summary de segurança gerado com verdict"
+    confidence: 0.95
+    greeting_message: "📝 Verificação de segurança completa! Summary disponível."
+    next_steps:
+      - command: "*full-review"
+        args_template: "--code={code}"
+        description: "Opcional: executar pipeline completo de code review"
+        priority: 2
