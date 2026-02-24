@@ -14,7 +14,7 @@ O AIOS Forge Squad é a meta-ferramenta do ecossistema AIOS: um squad que cria, 
 ## Instalação
 
 ```bash
-npx squads add aios-forge-squad
+npx squads add gutomec/squads-sh-aios/aios-forge-squad
 ```
 
 ## Agentes
